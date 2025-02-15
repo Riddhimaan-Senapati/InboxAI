@@ -196,26 +196,6 @@ export default function ChatPage() {
                 </div>
               ))}
             </div>
-
-            {/* Input Area */}
-            <div className="p-4 border-t border-gray-200">
-              <form onSubmit={handleSubmit} className="flex gap-4">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about your emails and schedule..."
-                  className="flex-1 rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-                <Button
-                  type="submit"
-                  className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl px-6"
-                >
-                  <Send className="h-5 w-5" />
-                </Button>
-              </form>
-            </div>
-            
           </div>
         </div>
       </div>
