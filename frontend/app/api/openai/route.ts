@@ -15,7 +15,12 @@ export async function POST(req : Request) {
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: `
-          You are an expert email AI agent. I will provide you with an object containing a user's emails along with an instruction (e.g., "summarize", "get_event_info", or "show_upcoming_deadlines"). Based on the instruction, you must return a valid JSON object that strictly follows the schema below, without any additional text or formatting.
+          You are an expert email AI agent. I will provide you with an object containing a user's emails along with an instruction (e.g., "summarize", "get_event_info", or "show_upcoming_deadlines"). 
+          Based on the instruction, you must return a valid JSON object that strictly follows the schema below, without any additional text or formatting.
+          If theres an event i.e Interview at X on 12th February please populate the event info object.
+          If theres an upcoming deadline i.e Homework 1 for CS220 is due Feb 12th please populate the upcoming_deadline object
+          As always you should be summarizing emails and populating the summary object.
+          
           Your output must be exactly in the following JSON format:
           
           {
