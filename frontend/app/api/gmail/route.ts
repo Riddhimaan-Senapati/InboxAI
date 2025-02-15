@@ -92,7 +92,7 @@ export async function GET(req: Request) {
     // Fetch the last 5 emails
     const messagesResponse = await gmail.users.messages.list({
       userId: 'me',
-      maxResults: 5, // Limit to the last 5 emails
+      maxResults: 50, // Limit to the last 5 emails
       q: query, // Optional query string to filter emails
     });
 

@@ -132,6 +132,7 @@ export default function ChatPage() {
   };
 
   const handleExampleClick = async (prompt: string) => {
+    console.log(prompt,"this is the prompt");
     setInput(prompt);
     type Label = {
       id: string;
@@ -142,14 +143,14 @@ export default function ChatPage() {
     const emails = (labels as Label[])
       .map(label => label.snippet)
       .join("\n\n");
-
+    console.log('emails',emails);
     try {
       const response = await fetch('/api/openai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ textData: emails, labels }),
+        body: JSON.stringify({ textData: "Your instruction is"+prompt+" please only return objects related to it.", emails }),
       });
       if (!response.ok) {
         throw new Error('Failed to analyze :(');
@@ -174,10 +175,16 @@ export default function ChatPage() {
         }
       
         // Extract all summary_text values
-        const summaries = parsedData.data.summary.map(
-          (item: { summary_text: string }) => item.summary_text
-        );
-        const textSum = summaries.join(" ");
+        let textSum = ""
+        if (prompt ==="summarize"){
+          const summaries = parsedData.data.summary.map(
+            (item: { summary_text: string }) => item.summary_text
+          );
+          textSum = summaries.join(" ");
+        }else if (prompt==="get_event_info"){
+          // call helper function for instansiating google calendar
+          console.log(parsedData);
+        }
         setMessages(textSum);
         setSummaryLoading(false);
       } catch (error) {

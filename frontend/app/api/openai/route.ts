@@ -16,7 +16,6 @@ export async function POST(req : Request) {
       messages: [
         { role: "system", content: `
           You are an expert email AI agent. I will provide you with an object containing a user's emails along with an instruction (e.g., "summarize", "get_event_info", or "show_upcoming_deadlines"). Based on the instruction, you must return a valid JSON object that strictly follows the schema below, without any additional text or formatting.
-          
           Your output must be exactly in the following JSON format:
           
           {
