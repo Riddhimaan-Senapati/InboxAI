@@ -2,6 +2,7 @@
 
 import { ArrowRight, Calendar, Mail, Sparkles, Clock, Lock, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SignInButton } from '@clerk/nextjs';
 
 export default function Home() {
   return (
@@ -22,15 +23,16 @@ export default function Home() {
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
-                Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              Signup to get started <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button size="lg" variant="outline" className="border-purple-200 hover:bg-purple-50">
                 Watch Demo
               </Button>
+              <SignInButton/>
             </div>
           </div>
 
-          {/* Stats */}
+          {/*
           <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto mt-20 text-center">
             <div className="purple-glow">
               <h3 className="text-3xl font-bold text-purple-600 mb-2">50K+</h3>
@@ -44,7 +46,7 @@ export default function Home() {
               <h3 className="text-3xl font-bold text-purple-600 mb-2">99.9%</h3>
               <p className="text-muted-foreground">Accuracy Rate</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -127,7 +129,7 @@ export default function Home() {
               Join thousands of professionals who have already simplified their email and calendar management.
             </p>
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
-              Start Free Trial <Star className="ml-2 h-4 w-4" />
+              Signup to get started <Star className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
