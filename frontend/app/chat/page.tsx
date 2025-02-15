@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Send, Calendar, Mail, Clock, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SignOutButton } from '@clerk/nextjs';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -33,6 +34,33 @@ const examplePrompts = [
 ];
 
 export default function ChatPage() {
+  const [labels, setLabels] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLabels = async () => {
+      try {
+        console.log('in useffect try block')
+        const response = await fetch('/api/gmail');
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        const data = await response.json();
+        setLabels(data);
+      } catch (err) {
+        console.log('in use effect catch block');
+        setError(err.message || 'Error fetching labels');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLabels();
+    console.log(labels);
+    console.log(error);
+    console.log(loading);
+  }, []);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -69,6 +97,7 @@ export default function ChatPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
+      <SignOutButton/>
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid md:grid-cols-[300px,1fr] gap-8">
           {/* Sidebar */}
