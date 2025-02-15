@@ -18,22 +18,26 @@ const examplePrompts = [
   {
     icon: Calendar,
     text: "Summarize all my emails from February 14th",
-    description: "Get a quick overview of your Valentine's Day communications"
+    description: "Get a quick overview of your Valentine's Day communications",
+    tag: "summarize"
   },
   {
     icon: Mail,
     text: "Find all meeting invites from last week",
-    description: "Quickly locate and organize recent meeting requests"
+    description: "Quickly locate and organize recent meeting requests",
+    tag:"get_event_info"
   },
   {
     icon: Clock,
     text: "Show upcoming deadlines mentioned in emails",
-    description: "Stay on top of important due dates and commitments"
+    description: "Stay on top of important due dates and commitments",
+    tag:"show_upcoming_deadlines"
   },
   {
     icon: Sparkles,
     text: "Analyze my email response time",
-    description: "Get insights into your email communication patterns"
+    description: "Get insights into your email communication patterns",
+    tag:""
   }
 ];
 
@@ -108,7 +112,6 @@ export default function ChatPage() {
       .map(label => label.snippet)
       .join("\n\n");
 
-    prompt = "summarize";
     try {
       const response = await fetch('/api/openai', {
         method: 'POST',
@@ -166,7 +169,7 @@ export default function ChatPage() {
               {examplePrompts.map((prompt, index) => (
                 <button
                   key={index}
-                  onClick={() => handleExampleClick(prompt.text)}
+                  onClick={() => handleExampleClick(prompt.tag)}
                   className="w-full text-left p-4 rounded-xl hover:bg-purple-50 transition-colors duration-200 group"
                 >
                   <div className="flex items-start gap-3">
