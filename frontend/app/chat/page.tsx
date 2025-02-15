@@ -7,6 +7,7 @@ import { SignOutButton } from '@clerk/nextjs';
 import { addDays, format, set } from 'date-fns';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import type { DateRange } from 'react-day-picker';
+import { useToast } from '@/hooks/use-toast';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -45,6 +46,8 @@ export default function ChatPage() {
   const [labels, setLabels] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [summaryLoading,setSummaryLoading] = useState(false);
+  const { toast } = useToast()
   const [date, setDate] = useState<DateRange>({
     from: new Date(),
     to: addDays(new Date(), 7),
@@ -74,6 +77,34 @@ export default function ChatPage() {
 
     fetchLabels();
   }, [date]);
+
+  useEffect(() => {
+    if (loading) {
+      toast({
+        title: "Getting Emails...",
+        description: "We're fetching your emails, please wait.",
+      });
+
+      // Simulate an async operation (e.g., API call)
+      setTimeout(() => {
+        setLoading(false); // Reset loading after 3 seconds
+      }, 3000);
+    }
+  }, [loading, toast]);
+
+  useEffect(() => {
+    if (summaryLoading) {
+      toast({
+        title: "Fetching Info...",
+        description: "We're fetching your Info, please wait.",
+      });
+
+      // Simulate an async operation (e.g., API call)
+      setTimeout(() => {
+        setLoading(false); // Reset loading after 3 seconds
+      }, 3000);
+    }
+  }, [summaryLoading, toast]);
   
   const [messages, setMessages] = useState<text>("Hello welcome, how can I help you today?");
   const [input, setInput] = useState('');
@@ -120,7 +151,6 @@ export default function ChatPage() {
         },
         body: JSON.stringify({ textData: emails, labels }),
       });
-
       if (!response.ok) {
         throw new Error('Failed to analyze :(');
       }
@@ -149,6 +179,7 @@ export default function ChatPage() {
         );
         const textSum = summaries.join(" ");
         setMessages(textSum);
+        setSummaryLoading(false);
       } catch (error) {
         console.error("Error in handleExampleClick:", error);
       }
@@ -169,7 +200,7 @@ export default function ChatPage() {
               {examplePrompts.map((prompt, index) => (
                 <button
                   key={index}
-                  onClick={() => handleExampleClick(prompt.tag)}
+                  onClick={() => {handleExampleClick(prompt.tag); setSummaryLoading(true);}}
                   className="w-full text-left p-4 rounded-xl hover:bg-purple-50 transition-colors duration-200 group"
                 >
                   <div className="flex items-start gap-3">
