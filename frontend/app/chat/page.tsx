@@ -47,6 +47,7 @@ export default function ChatPage() {
           throw new Error(response.statusText);
         }
         const data = await response.json();
+        console.log("fetched: ", data);
         setLabels(data);
       } catch (err) {
         console.log('in use effect catch block');
@@ -57,9 +58,6 @@ export default function ChatPage() {
     };
 
     fetchLabels();
-    console.log(labels);
-    console.log(error);
-    console.log(loading);
   }, []);
   const [messages, setMessages] = useState<Message[]>([
     {
