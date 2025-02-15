@@ -108,76 +108,34 @@ export default function ChatPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
       <SignOutButton/>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-[380px,1fr] gap-8">
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
-              <h2 className="text-xl font-semibold mb-4 gradient-text">Example Prompts</h2>
-              <div className="space-y-4">
-                {examplePrompts.map((prompt, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleExampleClick(prompt.text)}
-                    className="w-full text-left p-4 rounded-xl hover:bg-purple-50 transition-colors duration-200 group"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="bg-purple-100 rounded-lg p-2 group-hover:bg-purple-200 transition-colors duration-200">
-                        <prompt.icon className="h-5 w-5 text-purple-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm text-gray-900">{prompt.text}</p>
-                        <p className="text-sm text-gray-500 mt-1">{prompt.description}</p>
-                      </div>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-[350px,1fr,350px] gap-8">
+          {/* Left Sidebar - Example Prompts */}
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
+            <h2 className="text-xl font-semibold mb-4 gradient-text">Example Prompts</h2>
+            <div className="space-y-4">
+              {examplePrompts.map((prompt, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleExampleClick(prompt.text)}
+                  className="w-full text-left p-4 rounded-xl hover:bg-purple-50 transition-colors duration-200 group"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="bg-purple-100 rounded-lg p-2 group-hover:bg-purple-200 transition-colors duration-200">
+                      <prompt.icon className="h-5 w-5 text-purple-600" />
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          {/* Date Range Picker */}
-          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100 min-w-[350px]">
-              <h2 className="text-xl font-semibold mb-4 gradient-text">Select Date Range</h2>
-              <div className="rounded-lg border border-purple-100 p-4">
-                <CalendarComponent
-                  mode="range"
-                  selected={date}
-                  onSelect={(range) => {
-                    if (!range || !range.from || !range.to) return;
-                    setDate(range);
-                  }}                
-                  classNames={{
-                    root: "w-full",
-                    head_cell: "px-2 py-1 text-purple-600 font-medium",
-                    day: "w-10 h-10 flex items-center justify-center hover:bg-purple-50 focus:bg-purple-50",
-                    day_selected: "bg-purple-600 text-white hover:bg-purple-500 focus:bg-purple-500",
-                    day_today: "bg-purple-50",
-                  }}
-                />
-              </div>
-              <div className="mt-4 text-sm text-gray-500">
-                {date.from ? (
-                  date.to ? (
-                    <>
-                      <p>Selected range:</p>
-                      <p className="font-medium text-purple-600">
-                        {format(date.from, "MMMM d, yyyy")} - {format(date.to, "MMMM d, yyyy")}
-                      </p>
-                    </>
-                  ) : (
-                    <p>Select end date</p>
-                  )
-                ) : (
-                  <p>Select start date</p>
-                )}
-              </div>
+                    <div>
+                      <p className="font-medium text-sm text-gray-900">{prompt.text}</p>
+                      <p className="text-sm text-gray-500 mt-1">{prompt.description}</p>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
 
-
-
-          {/* Chat Area */}
+          {/* Middle - Chat Area */}
           <div className="bg-white rounded-2xl shadow-xl border border-purple-100 flex flex-col h-[calc(100vh-4rem)]">
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {messages.map((message, index) => (
                 <div
@@ -195,6 +153,44 @@ export default function ChatPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar - Date Range Picker */}
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
+            <h2 className="text-xl font-semibold mb-4 gradient-text">Select Date Range</h2>
+            <div className="rounded-lg border border-purple-100 p-4">
+              <CalendarComponent
+                mode="range"
+                selected={date}
+                onSelect={(range) => {
+                  if (!range || !range.from || !range.to) return;
+                  setDate(range);
+                }}                
+                classNames={{
+                  root: "w-full",
+                  head_cell: "px-2 py-1 text-purple-600 font-medium",
+                  day: "w-10 h-10 flex items-center justify-center hover:bg-purple-50 focus:bg-purple-50",
+                  day_selected: "bg-purple-600 text-white hover:bg-purple-500 focus:bg-purple-500",
+                  day_today: "bg-purple-50",
+                }}
+              />
+            </div>
+            <div className="mt-4 text-sm text-gray-500">
+              {date.from ? (
+                date.to ? (
+                  <>
+                    <p>Selected range:</p>
+                    <p className="font-medium text-purple-600">
+                      {format(date.from, "MMMM d, yyyy")} - {format(date.to, "MMMM d, yyyy")}
+                    </p>
+                  </>
+                ) : (
+                  <p>Select end date</p>
+                )
+              ) : (
+                <p>Select start date</p>
+              )}
             </div>
           </div>
         </div>
