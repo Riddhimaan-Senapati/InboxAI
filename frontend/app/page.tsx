@@ -6,7 +6,7 @@ import { SignInButton } from '@clerk/nextjs';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
+    <main className="text-4xl min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
       {/* Hero Section */}
       <section className="relative py-32">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?auto=format&fit=crop&q=80')] opacity-5" />

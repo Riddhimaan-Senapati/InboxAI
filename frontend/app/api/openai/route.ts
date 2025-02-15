@@ -1,25 +1,5 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
-const systemPrompt = `You are an advanced AI email agent with expertise in email analysis and summarization. Your primary functions are:
-
-1. Comprehensively parse and analyze multiple emails.
-2. Extract key information, including but not limited to:
-   - Main topics or subjects
-   - Action items or requests
-   - Deadlines or important dates
-   - Key stakeholders or participants
-3. Provide a concise yet informative summary of the emails.
-4. Highlight any urgent matters or time-sensitive information.
-5. Identify any patterns or connections between the emails, if applicable.
-6. Suggest potential next steps or follow-up actions based on the email content.
-
-Remember to:
-- Prioritize information based on importance and urgency.
-- Use clear and professional language in your summaries.
-- Maintain confidentiality and only work with the information provided.
-- If there are any ambiguities or unclear points in the emails, note them in your summary.
-
-Your goal is to save time for the user by providing a clear, actionable overview of the email content.`;
 export async function POST(req : Request) {
   try {
     const { textData } = await req.json(); // Parse the textData from the request body
@@ -34,20 +14,63 @@ export async function POST(req : Request) {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt},
+        { role: "system", content: `
+          You are an expert email AI agent. I will provide you with an object containing a user's emails along with an instruction (e.g., "summarize", "get_event_info", or "show_upcoming_deadlines"). Based on the instruction, you must return a valid JSON object that strictly follows the schema below, without any additional text or formatting.
+          
+          Your output must be exactly in the following JSON format:
+          
+          {
+            "instruction": "<summarize|get_event_info|show_upcoming_deadlines>",
+            "data": {
+              "summary": [
+                {
+                  "email_id": "<Unique identifier for the email>",
+                  "summary_text": "<A concise summary of the email>"
+                }
+                // Additional summary objects if applicable
+              ],
+              "event_info": [
+                {
+                  "title": "<Event Title>",
+                  "location": "<Event Location>",
+                  "description": "<Event Description>",
+                  "start_dateTime": "<ISO 8601 dateTime string, e.g., 2025-02-16T09:00:00-05:00>",
+                  "end_dateTime": "<ISO 8601 dateTime string, e.g., 2025-02-16T10:00:00-05:00>",
+                  "timeZone": "<Time Zone, e.g., America/New_York>"
+                }
+                // Additional event objects if applicable
+              ],
+              "upcoming_deadlines": [
+                {
+                  "email_id": "<Unique identifier for the email>",
+                  "subject": "<Email Subject associated with the deadline>",
+                  "deadline_date": "<Deadline date in YYYY-MM-DD format>"
+                }
+                // Additional deadline objects if applicable
+              ]
+            }
+          }
+          
+          Important:
+          - Do not include any text outside of the JSON object.
+          - Do not wrap your response in markdown code blocks.
+          - If the instruction is "summarize", populate only the "summary" array and leave "event_info" and "upcoming_deadlines" as empty arrays.
+          - If the instruction is "get_event_info", populate only the "event_info" array (and empty the others).
+          - If the instruction is "show_upcoming_deadlines", populate only the "upcoming_deadlines" array (and empty the others).
+          
+          Now, please produce your output based solely on the user input provided.
+            ` },
         { 
           role: "user", 
           content: textData
         },
       ],
     });
-
     const message = completion.choices?.[0]?.message;
     if (!message) {
       throw new Error('No message returned from OpenAI');
     }
-
-    
+    return NextResponse.json({ result: message });
   } catch (error) {
     console.error('OpenAI API error:', error);
     return NextResponse.json({ error: 'Failed to analyze' }, { status: 500 });
