@@ -109,7 +109,7 @@ export default function ChatPage() {
     <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
       <SignOutButton/>
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-[300px,1fr] gap-8">
+        <div className="grid md:grid-cols-[380px,1fr] gap-8">
           {/* Sidebar */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
@@ -135,7 +135,7 @@ export default function ChatPage() {
               </div>
             </div>
           {/* Date Range Picker */}
-          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100 min-w-[350px]">
               <h2 className="text-xl font-semibold mb-4 gradient-text">Select Date Range</h2>
               <div className="rounded-lg border border-purple-100 p-4">
                 <CalendarComponent
@@ -146,6 +146,7 @@ export default function ChatPage() {
                     setDate(range);
                   }}                
                   classNames={{
+                    root: "w-full",
                     head_cell: "px-2 py-1 text-purple-600 font-medium",
                     day: "w-10 h-10 flex items-center justify-center hover:bg-purple-50 focus:bg-purple-50",
                     day_selected: "bg-purple-600 text-white hover:bg-purple-500 focus:bg-purple-500",
