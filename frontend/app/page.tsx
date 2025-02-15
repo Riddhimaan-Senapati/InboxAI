@@ -28,7 +28,7 @@ export default function Home() {
               <Button size="lg" variant="outline" className="border-purple-200 hover:bg-purple-50">
                 Watch Demo
               </Button>
-              <SignInButton/>
+              <SignInButton forceRedirectUrl="/chat"/>
             </div>
           </div>
 
