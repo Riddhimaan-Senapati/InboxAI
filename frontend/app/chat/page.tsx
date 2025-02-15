@@ -1,14 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Send, Calendar, Mail, Clock, Sparkles } from 'lucide-react';
+import { Send, Mail, Clock, Sparkles, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SignOutButton } from '@clerk/nextjs';
+import { addDays, format } from 'date-fns';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import type { DateRange } from 'react-day-picker';
 
 type Message = {
   role: 'user' | 'assistant';
   content: string;
 };
+
 
 const examplePrompts = [
   {
@@ -37,20 +41,27 @@ export default function ChatPage() {
   const [labels, setLabels] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState<DateRange>({
+    from: new Date(),
+    to: addDays(new Date(), 7),
+  });
 
   useEffect(() => {
+    if (!date.from || !date.to) return;
+
+    const start = format(date.from, 'yyyy-MM-dd');
+    const end = format(date.to, 'yyyy-MM-dd');
+    console.log(start,end,"start and end dates");
+    
     const fetchLabels = async () => {
       try {
-        console.log('in useffect try block')
-        const response = await fetch('/api/gmail');
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
+        setLoading(true);
+        const response = await fetch(`/api/gmail?start=${start}&end=${end}`);
+        if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
-        console.log("fetched: ", data);
+        console.log("emails",data);
         setLabels(data);
-      } catch (err) {
-        console.log('in use effect catch block');
+      } catch (err: any) {
         setError(err.message || 'Error fetching labels');
       } finally {
         setLoading(false);
@@ -58,7 +69,8 @@ export default function ChatPage() {
     };
 
     fetchLabels();
-  }, []);
+  }, [date]);
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -122,7 +134,45 @@ export default function ChatPage() {
                 ))}
               </div>
             </div>
+          {/* Date Range Picker */}
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
+              <h2 className="text-xl font-semibold mb-4 gradient-text">Select Date Range</h2>
+              <div className="rounded-lg border border-purple-100 p-4">
+                <CalendarComponent
+                  mode="range"
+                  selected={date}
+                  onSelect={(range) => {
+                    if (!range || !range.from || !range.to) return;
+                    setDate(range);
+                  }}                
+                  classNames={{
+                    head_cell: "px-2 py-1 text-purple-600 font-medium",
+                    day: "w-10 h-10 flex items-center justify-center hover:bg-purple-50 focus:bg-purple-50",
+                    day_selected: "bg-purple-600 text-white hover:bg-purple-500 focus:bg-purple-500",
+                    day_today: "bg-purple-50",
+                  }}
+                />
+              </div>
+              <div className="mt-4 text-sm text-gray-500">
+                {date.from ? (
+                  date.to ? (
+                    <>
+                      <p>Selected range:</p>
+                      <p className="font-medium text-purple-600">
+                        {format(date.from, "MMMM d, yyyy")} - {format(date.to, "MMMM d, yyyy")}
+                      </p>
+                    </>
+                  ) : (
+                    <p>Select end date</p>
+                  )
+                ) : (
+                  <p>Select start date</p>
+                )}
+              </div>
+            </div>
           </div>
+
+
 
           {/* Chat Area */}
           <div className="bg-white rounded-2xl shadow-xl border border-purple-100 flex flex-col h-[calc(100vh-4rem)]">
@@ -164,6 +214,7 @@ export default function ChatPage() {
                 </Button>
               </form>
             </div>
+            
           </div>
         </div>
       </div>

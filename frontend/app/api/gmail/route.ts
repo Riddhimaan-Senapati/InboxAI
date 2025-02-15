@@ -45,11 +45,25 @@ import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { createClerkClient } from '@clerk/nextjs/server';
 
-export async function GET(_req: Request) {
+export async function GET(req: Request) {
   const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
   try {
     const { userId } = await auth();
+
+    const { searchParams } = new URL(req.url);
+    const startDate = searchParams.get('start'); // e.g., "2025-02-01"
+    const endDate = searchParams.get('end');     // e.g., "2025-02-15"
+    // Build the Gmail query string using Unix timestamps
+    let query = 'label:inbox';
+    if (startDate) {
+      const startTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
+      query += ` after:${startTimestamp}`;
+    }
+    if (endDate) {
+      const endTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
+      query += ` before:${endTimestamp}`;
+    }
 
     const oauthAccessTokenResponse = await clerkClient.users.getUserOauthAccessToken(
       userId || '',
@@ -79,7 +93,7 @@ export async function GET(_req: Request) {
     const messagesResponse = await gmail.users.messages.list({
       userId: 'me',
       maxResults: 5, // Limit to the last 5 emails
-      q: '', // Optional query string to filter emails
+      q: query, // Optional query string to filter emails
     });
 
     const messages = messagesResponse.data.messages;
