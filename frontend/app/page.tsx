@@ -1,101 +1,139 @@
-import Image from "next/image";
+'use client';
+
+import { ArrowRight, Calendar, Mail, Sparkles, Clock, Lock, Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SignInButton } from '@clerk/nextjs';
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
+      {/* Hero Section */}
+      <section className="relative py-32">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?auto=format&fit=crop&q=80')] opacity-5" />
+        <div className="container mx-auto px-4 max-w-6xl relative">
+          <div className="text-center mb-16">
+            <div className="inline-block mb-4 px-4 py-1 bg-purple-100 rounded-full">
+              <span className="text-purple-700 font-medium">AI-Powered Email Management</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 gradient-text leading-tight p-2">
+              Your Emails,<br />Intelligently Managed
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
+              Let AI organize your schedule by automatically extracting important events from your emails and syncing them with Google Calendar.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
+              Signup to get started <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <Button size="lg" variant="outline" className="border-purple-200 hover:bg-purple-50">
+                Watch Demo
+              </Button>
+              <SignInButton/>
+            </div>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          {/*
+          <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto mt-20 text-center">
+            <div className="purple-glow">
+              <h3 className="text-3xl font-bold text-purple-600 mb-2">50K+</h3>
+              <p className="text-muted-foreground">Active Users</p>
+            </div>
+            <div className="purple-glow">
+              <h3 className="text-3xl font-bold text-purple-600 mb-2">1M+</h3>
+              <p className="text-muted-foreground">Events Processed</p>
+            </div>
+            <div className="purple-glow">
+              <h3 className="text-3xl font-bold text-purple-600 mb-2">99.9%</h3>
+              <p className="text-muted-foreground">Accuracy Rate</p>
+            </div>
+          </div> */}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      {/* Feature Cards */}
+      <section className="py-32 bg-gradient-to-b from-white to-purple-50">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-bold gradient-text mb-6">Powerful Features</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to take control of your schedule
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="feature-card">
+              <Mail className="h-12 w-12 text-purple-600 mb-6" />
+              <h3 className="text-xl font-semibold mb-4">Smart Email Analysis</h3>
+              <p className="text-muted-foreground">
+                Our AI reads your emails and identifies important dates, meetings, and deadlines automatically.
+              </p>
+            </div>
+            <div className="feature-card">
+              <Sparkles className="h-12 w-12 text-purple-600 mb-6" />
+              <h3 className="text-xl font-semibold mb-4">AI Summarization</h3>
+              <p className="text-muted-foreground">
+                Get concise summaries of important events and details, never miss a crucial meeting again.
+              </p>
+            </div>
+            <div className="feature-card">
+              <Calendar className="h-12 w-12 text-purple-600 mb-6" />
+              <h3 className="text-xl font-semibold mb-4">Calendar Integration</h3>
+              <p className="text-muted-foreground">
+                Events are automatically added to your Google Calendar with all relevant details included.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-bold gradient-text mb-6">How It Works</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Three simple steps to transform your email management
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <Lock className="h-10 w-10 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">1. Secure Login</h3>
+              <p className="text-muted-foreground">Connect your email account securely using OAuth authentication.</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="h-10 w-10 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">2. AI Processing</h3>
+              <p className="text-muted-foreground">Our AI analyzes your emails and extracts important events and details.</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <Clock className="h-10 w-10 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">3. Auto-Scheduling</h3>
+              <p className="text-muted-foreground">Events are automatically added to your calendar with smart reminders.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-32 bg-gradient-to-b from-purple-50 to-white">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <div className="purple-glow bg-white/50 backdrop-blur-sm p-16 rounded-3xl border border-purple-100">
+            <h2 className="text-3xl md:text-5xl font-bold gradient-text mb-6">Ready to Streamline Your Schedule?</h2>
+            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Join thousands of professionals who have already simplified their email and calendar management.
+            </p>
+            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
+              Signup to get started <Star className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
