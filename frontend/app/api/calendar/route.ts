@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { google } from "googleapis";
 import { createClerkClient } from "@clerk/nextjs/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface CalendarEvent {
   summary: string;

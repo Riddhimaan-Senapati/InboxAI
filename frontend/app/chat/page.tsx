@@ -1,20 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
-
 import { useEffect, useState } from 'react';
-import { Send, Mail, Clock, Sparkles, Calendar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import {Mail, Clock, Calendar } from 'lucide-react';
 import { SignOutButton } from '@clerk/nextjs';
-import { addDays, format, set } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import type { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
-import { calendarInvite } from './helper';
-
-type Message = {
-  role: 'user' | 'assistant';
-  content: string;
-};
-
 
 const examplePrompts = [
   {
@@ -39,7 +32,6 @@ const examplePrompts = [
 
 export default function ChatPage() {
   const [labels, setLabels] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [summaryLoading,setSummaryLoading] = useState(false);
   const { toast } = useToast()
@@ -64,7 +56,7 @@ export default function ChatPage() {
         console.log("emails",data);
         setLabels(data);
       } catch (err: any) {
-        setError(err.message || 'Error fetching labels');
+        console.log(err.message);
       } finally {
         setLoading(false);
       }
@@ -101,34 +93,11 @@ export default function ChatPage() {
     }
   }, [summaryLoading, toast]);
   
-  const [messages, setMessages] = useState<text>("Hello welcome, how can I help you today?");
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<string>("Hello welcome, how can I help you today?");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    // Add user message
-    const userMessage: Message = { role: 'user', content: input };
-    
-    // Simulate AI response
-    const aiResponse: Message = {
-      role: 'assistant',
-      content: "Here's a summary of your emails from February 14th:\n\n" +
-        "1. Meeting with Marketing Team (10:00 AM)\n" +
-        "2. Project Deadline Reminder from John\n" +
-        "3. Client Proposal Review Request\n" +
-        "4. Team Lunch Invitation\n\n" +
-        "Would you like me to add any of these events to your calendar?"
-    };
-
-    setMessages(prev => [...prev, userMessage, aiResponse]);
-    setInput('');
-  };
 
   const handleExampleClick = async (prompt: string) => {
     console.log(prompt,"this is the prompt");
-    setInput(prompt);
     type Label = {
       id: string;
       snippet: string;
@@ -178,7 +147,10 @@ export default function ChatPage() {
           );
           textSum = summaries.join("\n\n---\n");
         } else if (prompt === "get_event_info") {
-          const formattedEvents = parsedData.data.event_info.map(event => 
+
+          
+          // @ts-expect-error unable to infer
+          const formattedEvents = parsedData.data.event_info.map((event) => 
             `📅 *${event.title}*\n` +
             `📍 ${event.location} | 🕒 ${new Date(event.start_dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` +
             `\n${event.description.slice(0, 80)}...`
@@ -200,6 +172,7 @@ export default function ChatPage() {
 
           textSum = formattedEvents.join("\n\n――――――――――――\n");
         } else if (prompt === "show_upcoming_deadlines") {
+          // @ts-expect-error unable to infer
           const formattedDeadlines = parsedData.data.upcoming_deadlines.map(deadline => 
             `⏳ *${deadline.subject}*\n` +
             `📅 ${new Date(deadline.deadline_date).toLocaleDateString("en-US", { 
