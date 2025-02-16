@@ -135,6 +135,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <section className="py-8 bg-white text-center">
+        <p className="text-base text-muted-foreground">
+          Built with ❤️ by Ahmed Khan and Riddhimaan Senapati
+        </p>
+      </section>
     </main>
   );
 }
