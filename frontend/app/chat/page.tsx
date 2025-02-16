@@ -13,13 +13,13 @@ import { Button } from '@/components/ui/button';
 const examplePrompts = [
   {
     icon: Calendar,
-    text: "Summarize all my emails from February 14th",
+    text: "Summarize all my emails",
     description: "Get a quick overview of your Valentine's Day communications",
     tag: "summarize"
   },
   {
     icon: Mail,
-    text: "Find all meeting invites from last week",
+    text: "Find all meeting invites",
     description: "Quickly locate and organize recent meeting requests",
     tag:"get_event_info"
   },
@@ -208,7 +208,7 @@ export default function ChatPage() {
         <div className="grid grid-cols-[300px,1fr,450px] gap-8">
           {/* Left Sidebar - Example Prompts */}
           <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
-            <h2 className="text-xl font-semibold mb-4 gradient-text">Example Prompts</h2>
+            <h2 className="text-xl font-semibold mb-4 gradient-text">Email Actions</h2>
             <div className="space-y-4">
               {examplePrompts.map((prompt, index) => (
                 <button
