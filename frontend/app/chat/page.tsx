@@ -150,7 +150,7 @@ export default function ChatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ textData: "Your instruction is"+prompt+" please only return objects related to it.", emails }),
+        body: JSON.stringify({ textData: JSON.stringify({instruction: prompt, emails}) }),
       });
       if (!response.ok) {
         throw new Error('Failed to analyze :(');
