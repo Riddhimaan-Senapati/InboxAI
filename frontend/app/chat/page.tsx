@@ -190,12 +190,12 @@ export default function ChatPage() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: parsedData,
+            body: JSON.stringify(parsedData),
           });
         
           if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Failed to create event');
+            throw new Error(error.message);
           }
 
           textSum = formattedEvents.join("\n\n――――――――――――\n");
