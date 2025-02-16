@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'EmailAI - Smart Email to Calendar Assistant',
+  title: 'tldrmail',
   description: 'Automatically extract events from your emails and add them to your calendar using AI',
 };
 
