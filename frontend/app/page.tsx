@@ -129,9 +129,11 @@ export default function Home() {
             <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
               Be among the first to try this innovative email management solution. Built with ❤️ during Hack(h)er-413 2025
             </p>
+            <SignInButton forceRedirectUrl="/chat">
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
               Signup to get started <Star className="ml-2 h-4 w-4" />
             </Button>
+            </SignInButton>
           </div>
         </div>
       </section>
