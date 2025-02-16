@@ -177,9 +177,30 @@ export default function ChatPage() {
           textSum = summaries.join(" ");
         }else if (prompt==="get_event_info"){
           // call helper function for instansiating google calendar
-          console.log(parsedData);
+          const formattedEvents = parsedData.data.event_info.map(event => {
+            return `Title       : ${event.title}
+            Location    : ${event.location}
+            Description : ${event.description}
+            Start       : ${new Date(event.start_dateTime).toLocaleString()}
+            End         : ${new Date(event.end_dateTime).toLocaleString()}`;
+              });
+          
+          // Join the formatted events with line breaks for clear separation
+          textSum = formattedEvents.join("\n\n");
         }else if(prompt === "show_upcoming_deadlines"){
-          console.log(parsedData);
+          // Map over each event in the event_info array and format its properties
+          const formattedDeadlines = parsedData.data.upcoming_deadlines.map(deadline => {
+            return `Email ID     : ${deadline.email_id}
+            Subject      : ${deadline.subject}
+            Deadline Date: ${new Date(deadline.deadline_date).toLocaleDateString("en-US", {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}`;
+              });
+          // Join the formatted strings with double line breaks for clear separation
+          textSum = formattedDeadlines.join("\n\n");
         }
         setMessages(textSum);
         setSummaryLoading(false);
