@@ -1,5 +1,7 @@
 # 📩 TLDRMail  
 
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=xUNG3yKc2hk)
+
 TLDRMail is an AI-powered email assistant that helps users **summarize emails, extract key event details, and track deadlines**—all in one place.  
 
 ## 🚀 Inspiration  
