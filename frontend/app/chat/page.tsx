@@ -222,9 +222,16 @@ export default function ChatPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50">
-      <SignOutButton/>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-[350px,1fr,350px] gap-8">
+      <div className="max-w-[1440px] mx-auto px-4 py-8">
+        <div className="flex justify-end mb-2 -mt-4">
+          <SignOutButton>
+            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
+              Sign out
+            </Button>
+          </SignOutButton>
+        </div>
+
+        <div className="grid grid-cols-[300px,1fr,450px] gap-8">
           {/* Left Sidebar - Example Prompts */}
           <div className="bg-white rounded-2xl p-6 shadow-xl border border-purple-100">
             <h2 className="text-xl font-semibold mb-4 gradient-text">Example Prompts</h2>
