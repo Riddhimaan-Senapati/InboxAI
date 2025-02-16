@@ -127,7 +127,7 @@ export default function Home() {
           <div className="purple-glow bg-white/50 backdrop-blur-sm p-16 rounded-3xl border border-purple-100">
             <h2 className="text-3xl md:text-5xl font-bold gradient-text mb-6">Ready to Streamline Your Schedule?</h2>
             <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Join thousands of professionals who have already simplified their email and calendar management.
+              Be among the first to try this innovative email management solution. Built with ❤️ during Hack(h)er-413 2025
             </p>
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
               Signup to get started <Star className="ml-2 h-4 w-4" />
