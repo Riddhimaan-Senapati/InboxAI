@@ -22,15 +22,14 @@ export default function Home() {
               Let AI organize your schedule by automatically extracting important events from your emails and syncing them with Google Calendar.
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
-              Signup to get started <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <SignInButton forceRedirectUrl="/chat">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
+                  Sign in to get started <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </SignInButton>
               <Button size="lg" variant="outline" className="border-purple-200 hover:bg-purple-50">
                 Watch Demo
               </Button>
-              <SignInButton forceRedirectUrl="/chat" size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
-              Signin
-              </SignInButton>
             </div>
           </div>
 
