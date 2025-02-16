@@ -8,6 +8,7 @@ import { addDays, format } from 'date-fns';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import type { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const examplePrompts = [
   {
