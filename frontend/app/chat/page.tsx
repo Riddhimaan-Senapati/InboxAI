@@ -170,37 +170,28 @@ export default function ChatPage() {
       
         // Extract all summary_text values
         let textSum = ""
-        if (prompt ==="summarize"){
+        if (prompt === "summarize") {
           const summaries = parsedData.data.summary.map(
-            (item: { summary_text: string }) => item.summary_text
+            (item: { summary_text: string }) => `📌 ${item.summary_text}`
           );
-          textSum = summaries.join(" ");
-        }else if (prompt==="get_event_info"){
-          // call helper function for instansiating google calendar
-          const formattedEvents = parsedData.data.event_info.map(event => {
-            return `Title       : ${event.title}
-            Location    : ${event.location}
-            Description : ${event.description}
-            Start       : ${new Date(event.start_dateTime).toLocaleString()}
-            End         : ${new Date(event.end_dateTime).toLocaleString()}`;
-              });
-          
-          // Join the formatted events with line breaks for clear separation
-          textSum = formattedEvents.join("\n\n");
-        }else if(prompt === "show_upcoming_deadlines"){
-          // Map over each event in the event_info array and format its properties
-          const formattedDeadlines = parsedData.data.upcoming_deadlines.map(deadline => {
-            return `Email ID     : ${deadline.email_id}
-            Subject      : ${deadline.subject}
-            Deadline Date: ${new Date(deadline.deadline_date).toLocaleDateString("en-US", {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}`;
-              });
-          // Join the formatted strings with double line breaks for clear separation
-          textSum = formattedDeadlines.join("\n\n");
+          textSum = summaries.join("\n\n---\n");
+        } else if (prompt === "get_event_info") {
+          const formattedEvents = parsedData.data.event_info.map(event => 
+            `📅 *${event.title}*\n` +
+            `📍 ${event.location} | 🕒 ${new Date(event.start_dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` +
+            `\n${event.description.slice(0, 80)}...`
+          );
+          textSum = formattedEvents.join("\n\n――――――――――――\n");
+        } else if (prompt === "show_upcoming_deadlines") {
+          const formattedDeadlines = parsedData.data.upcoming_deadlines.map(deadline => 
+            `⏳ *${deadline.subject}*\n` +
+            `📅 ${new Date(deadline.deadline_date).toLocaleDateString("en-US", { 
+              month: 'short', 
+              day: 'numeric', 
+              weekday: 'short' 
+            })}`
+          );
+          textSum = formattedDeadlines.join("\n\n――――――――――――\n");
         }
         setMessages(textSum);
         setSummaryLoading(false);
