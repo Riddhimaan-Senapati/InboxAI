@@ -14,7 +14,7 @@ const examplePrompts = [
   {
     icon: Calendar,
     text: "Summarize all my emails",
-    description: "Get a quick overview of your Valentine's Day communications",
+    description: "Get a quick overview of your emails during a certain timeframe.",
     tag: "summarize"
   },
   {
