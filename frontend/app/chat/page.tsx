@@ -8,6 +8,7 @@ import { addDays, format, set } from 'date-fns';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import type { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
+import { calendarInvite } from './helper';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -171,6 +172,7 @@ export default function ChatPage() {
         // Extract all summary_text values
         let textSum = ""
         if (prompt === "summarize") {
+
           const summaries = parsedData.data.summary.map(
             (item: { summary_text: string }) => `📌 ${item.summary_text}`
           );
@@ -181,6 +183,21 @@ export default function ChatPage() {
             `📍 ${event.location} | 🕒 ${new Date(event.start_dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` +
             `\n${event.description.slice(0, 80)}...`
           );
+
+          // call calendar api
+          const response = await fetch('/api/calendar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: parsedData,
+          });
+        
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to create event');
+          }
+
           textSum = formattedEvents.join("\n\n――――――――――――\n");
         } else if (prompt === "show_upcoming_deadlines") {
           const formattedDeadlines = parsedData.data.upcoming_deadlines.map(deadline => 

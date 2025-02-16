@@ -1,89 +1,88 @@
-import { auth } from '@clerk/nextjs/server';
+// app/api/calendar/route.ts
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import { google } from 'googleapis';
 import { createClerkClient } from '@clerk/nextjs/server';
 
-export async function POST(req: Request) {
-const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-
-try {
-// Ensure the user is authenticated.
-const { userId } = await auth();
-// Extract meeting details from the URL’s query parameters.
-// Expected parameters:
-//   date       — The meeting date (e.g., "2025-03-01")
-//   start      — The meeting start time (e.g., "10:00")
-//   end        — The meeting end time (e.g., "11:00")
-//   summary    — The meeting title/summary (optional; defaults to "New Meeting")
-//   description— The meeting description (optional)
-//   location   — The meeting location (optional)
-//   timeZone   — The time zone for the event (optional; defaults to "UTC")
-const { searchParams } = new URL(req.url);
-const meetingDate = searchParams.get('date');
-const startTime = searchParams.get('start');
-const endTime = searchParams.get('end');
-const summary = searchParams.get('summary') || 'New Meeting';
-const description = searchParams.get('description') || '';
-const location = searchParams.get('location') || '';
-const timeZone = searchParams.get('timeZone') || 'UTC';
-
-// Validate required fields.
-if (!meetingDate || !startTime || !endTime) {
-  return new NextResponse('Missing required parameters: date, start, end', { status: 400 });
-}
-
-// Combine the meeting date with start and end times to create ISO date-time strings.
-// Assumes meetingDate is in "YYYY-MM-DD" and times are in "HH:MM" (24-hour) format.
-const startDateTime = new Date(`${meetingDate}T${startTime}:00`);
-const endDateTime = new Date(`${meetingDate}T${endTime}:00`);
-
-// Retrieve the user's Google OAuth access token from Clerk.
-const oauthAccessTokenResponse = await clerkClient.users.getUserOauthAccessToken(
-  userId || '',
-  'google'
-);
-const oauthAccessTokens = oauthAccessTokenResponse.data;
-
-if (!oauthAccessTokens || oauthAccessTokens.length === 0) {
-  return new NextResponse('Unauthorized: NO TOKEN', { status: 401 });
-}
-const { token } = oauthAccessTokens;
-
-if (!token) {
-  return new NextResponse('Unauthorized: NO TOKEN', { status: 401 });
-}
-
-// Set up the OAuth2 client using the retrieved token.
-const oauth2Client = new google.auth.OAuth2();
-oauth2Client.setCredentials({ access_token: token });
-
-// Initialize the Calendar API.
-const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
-
-// Build the event object.
-const event = {
-  summary,
-  description,
-  location,
+interface CalendarEvent {
+  summary: string;
+  location?: string;
+  description?: string;
   start: {
-    dateTime: startDateTime.toISOString(),
-    timeZone,
-  },
+    dateTime: string;
+    timeZone: string;
+  };
   end: {
-    dateTime: endDateTime.toISOString(),
-    timeZone,
-  },
-};
+    dateTime: string;
+    timeZone: string;
+  };
+  attendees?: Array<{ email: string }>;
+  conferenceData?: {
+    createRequest: {
+      requestId: string;
+      conferenceSolutionKey: {
+        type: string;
+      };
+    };
+  };
+}
 
-// Insert the event into the primary calendar.
-const eventResponse = await calendar.events.insert({
-  calendarId: 'primary',
-  requestBody: event,
-});
+export async function POST(req: Request) {
+  const { userId } = await auth();
+  
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-return NextResponse.json(eventResponse.data);
-} catch (error) {
-    console.error('[CALENDAR EVENT ERROR]', error);
-    return new NextResponse('Internal error', { status: 500 });
+  try {
+    const body = await req.json();
+    
+    // Map directly to CalendarEvent without validation
+    const calendarEvents: CalendarEvent[] = body.data.event_info.map((event: any) => ({
+      summary: event.title,
+      location: event.location,
+      description: event.description,
+      start: {
+        dateTime: new Date(event.start_dateTime).toISOString(),
+        timeZone: "UTC"
+      },
+      end: {
+        dateTime: new Date(event.end_dateTime).toISOString(),
+        timeZone: "UTC"
+      }
+    }));
+
+    // Create Clerk client
+    const clerkClient = createClerkClient({
+      secretKey: process.env.CLERK_SECRET_KEY,
+    });
+
+    // Get Google OAuth token
+    const oauthResponse = await clerkClient.users.getUserOauthAccessToken(userId, "google");
+    const [tokenData] = oauthResponse.data;
+    
+    if (!tokenData?.token) {
+      return NextResponse.json({ error: 'No Google token found' }, { status: 401 });
     }
-    }
+
+    // Create Google Calendar client
+    const oauth2Client = new google.auth.OAuth2();
+    oauth2Client.setCredentials({ access_token: tokenData.token });
+    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+
+    // Insert first event (modify to handle multiple events if needed)
+    const response = await calendar.events.insert({
+      calendarId: 'primary',
+      requestBody: calendarEvents[0],
+      conferenceDataVersion: 1
+    });
+
+    return NextResponse.json(response.data);
+
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
