@@ -34,12 +34,6 @@ const examplePrompts = [
     description: "Stay on top of important due dates and commitments",
     tag:"show_upcoming_deadlines"
   },
-  {
-    icon: Sparkles,
-    text: "Analyze my email response time",
-    description: "Get insights into your email communication patterns",
-    tag:""
-  }
 ];
 
 export default function ChatPage() {
@@ -183,6 +177,8 @@ export default function ChatPage() {
           textSum = summaries.join(" ");
         }else if (prompt==="get_event_info"){
           // call helper function for instansiating google calendar
+          console.log(parsedData);
+        }else if(prompt === "show_upcoming_deadlines"){
           console.log(parsedData);
         }
         setMessages(textSum);
